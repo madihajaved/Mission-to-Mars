@@ -26,7 +26,6 @@ def scrape_all():
       "news_paragraph": news_paragraph,
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
-      "mars hemispheres": mars_hemispheres(browser),
       "last_modified": dt.datetime.now()
     }
 
@@ -125,38 +124,6 @@ def mars_facts():
     # Pandas can easily convert our DataFrame back into HTML-ready code using the .to_html() function
     #df.to_html()
     return df.to_html()
-
-### Mars Hemispheres
-def mars_hemispheres(browser):
-    # 1. Use browser to visit the URL 
-    url = 'https://marshemispheres.com/'
-    browser.visit(url)
-
-    # 2. Create a list to hold the images and titles.
-    hemisphere_image_urls = []
-
-    # 3. Write code to retrieve the image urls and titles for each hemisphere.
-
-    for i in range(4):
-        browser.find_by_css('a.product-item h3')[i].click()
-        mars_hemispheres = {}
-        html = browser.html
-        results = soup(html, 'html.parser')
-        
-        try:
-            mars_hemispheres['title'] = results.find('h2', class_ = 'title').get_text()
-            class_downloads = results.find('div', class_='downloads')
-            image_url_text = class_downloads.find('a').get('href')
-            mars_hemispheres['img_url'] = str(url + image_url_text) 
-            hemisphere_image_urls.append(mars_hemispheres)
-        
-        except BaseException:
-            return None
-
-        browser.back()
-
-    # 4. Print the list that holds the dictionary of each image url and title.
-    return hemisphere_image_urls
 
 if __name__ == "__main__":
     # If running as script, print scraped data
